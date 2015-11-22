@@ -1,0 +1,23 @@
+{
+  "name": "phearnet.github.io",
+  "version": "0.0.0",
+  "description": "PhearNet Github Page",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PhearNet/phearnet.github.io.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PhearNet/phearnet.github.io/issues"
+  },
+  "homepage": "https://phearnet.github.io",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-bower": "^0.20.0"
+  }
+}
