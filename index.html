@@ -120,7 +120,7 @@
 
     function updateStats() {
         $.ajax({
-            url: "http://engine-phearnet.rhcloud.com/stats",
+            url: "https://engine-phearnet.rhcloud.com/stats",
             dataType: "json",
             success: function (response) {
                 var htmlBlock = "<p>Scans: {0} Complete: {1} Failed: {2} Inactive: {3} Delayed: {4} Worktime: {5}</p>"
