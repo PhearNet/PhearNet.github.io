@@ -45,16 +45,20 @@
                     <nav>
                         <ul class="nav masthead-nav">
                             <li class="active"><a href="#">Home</a></li>
-                            <li><a href="#">Targets</a></li>
+                            <li><a class="targets" href="#">Targets</a></li>
                             <li><a href="#">Blocks</a></li>
                         </ul>
                     </nav>
                 </div>
             </div>
 
+            <div class="dataview">
+
+            </div>
+
             <div class="mastfoot">
                 <div class="inner">
-                    <p>Acive Scans: 0 Total Scans: 0 Targets: 0 </p>
+                    <p>Scans: 0 Complete: 0 Failed: 0 Inactive: 0 Delayed: 0 Worktime: 0</p>
                 </div>
             </div>
 
@@ -71,6 +75,95 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
         integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ=="
         crossorigin="anonymous"></script>
+<script>
+    var targets = [];
+    var targetIndx = 0;
+    var blocks = [];
+    /**
+     * Chunk takes an array then splits it by
+     * the size and returns and array of chunks
+     * @param data
+     * @param size
+     * @returns {Array}
+     */
+    function Chunk(data, size) {
+        var i, j,tmp = [], chunk = size;
+        for (i = 0, j = data.length; i < j; i += chunk) {
+            tmp.push(data.slice(i, i + chunk));
+        }
+        return tmp;
+    };
+    // Format creation
+    if (!String.prototype.format) {
+        String.prototype.format = function () {
+            var args = arguments;
+            return this.replace(/{(\d+)}/g, function (match, number) {
+                return typeof args[number] != 'undefined'
+                        ? args[number]
+                        : match
+                        ;
+            });
+        };
+    }
+    $(document).ready(function () {
+        updateStats();
+        if(!targets.length > 0){
+            getTargets();
+        }
+        $('.targets').click(function(){
+            showTargets(targetIndx);
+        })
+
+        setInterval(updateStats, 10000)
+    });
+
+
+    function updateStats() {
+        $.ajax({
+            url: "http://engine-phearnet.rhcloud.com/stats",
+            dataType: "json",
+            success: function (response) {
+                var htmlBlock = "<p>Scans: {0} Complete: {1} Failed: {2} Inactive: {3} Delayed: {4} Worktime: {5}</p>"
+                        .format(
+                                response.activeCount,
+                                response.completeCount,
+                                response.failedCount,
+                                response.inactiveCount,
+                                response.delayedCount,
+                                response.workTime
+                        );
+                $(".mastfoot .inner").html(htmlString);
+            }
+        });
+    }
+
+    function showTargets(indx){
+        targetIndx = indx;
+        var htmlString= "";
+        var rows = Chunk(targets[indx], 4);
+        rows.forEach(function(row, rowIndx){
+            htmlString += '<div class="row">';
+            row.forEach(function(record, recordIndx){
+                htmlString += '<div class="col-xs-6 col-md-3">';
+                htmlString += '<p>' + JSON.stringify(record.value) + '</p>';
+                htmlString += '</div>';
+            });
+            htmlString += '</div>';
+        });
+        $(".dataview").html(htmlString);
+    }
+
+    function getTargets(){
+        $.ajax({
+            url: "https://phearnet.cloudant.com/targets/_design/index/_view/isUp",
+            dataType: "json",
+            success: function (response) {
+                targets = Chunk(response.rows, 16);
+            }
+        });
+    }
+
+</script>
 
 
 </body>
