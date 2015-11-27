@@ -44,17 +44,19 @@
                     <!--<h3 class="masthead-brand">PhearNet</h3>-->
                     <nav>
                         <ul class="nav masthead-nav">
-                            <li class="active"><a href="#">Home</a></li>
-                            <li><a class="targets" href="#">Targets</a></li>
-                            <li><a href="#">Blocks</a></li>
+                            <li class="active"><a class="home" href="#home">Home</a></li>
+                            <li><a class="targets" href="#targets">Targets</a></li>
+                            <li><a class="blocks" href="#blocks">Blocks</a></li>
                         </ul>
                     </nav>
                 </div>
             </div>
-
-            <div class="dataview">
+            <div class="col-md-1"> <button type="button" class="pageleft btn btn-default"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button></div>
+            <div class="col-md-10 dataview">
 
             </div>
+            <div class="col-md-1"> <button type="button" class="pageright btn btn-default"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></button></div>
+
 
             <div class="mastfoot">
                 <div class="inner">
@@ -105,19 +107,42 @@
             });
         };
     }
+
     $(document).ready(function () {
         updateStats();
         if(!targets.length > 0){
-            getTargets();
+            getTargets(function(targets){
+                $('.targets').click(function(){
+                    showTargets(targetIndx);
+                });
+                $('.pageright').click(function(){
+                    if(targetIndx + 1 != targets.length)
+                        targetIndx++;
+                        showTargets(targetIndx);
+                });
+                $('.pageleft').click(function(){
+                    if(targetIndx != 0){
+                        targetIndx--;
+                        showTargets(targetIndx);
+
+                    }
+                });
+            });
         }
-        $('.targets').click(function(){
-            showTargets(targetIndx);
-        })
+
+        $('.home').click(function(){
+            clearView();
+        });
+        $('.blocks').click(function(){
+            clearView();
+        });
 
         setInterval(updateStats, 50000)
     });
 
+    function changePage(){
 
+    }
     function updateStats() {
         $.ajax({
             url: "https://engine-phearnet.rhcloud.com/stats",
@@ -136,11 +161,15 @@
             }
         });
     }
-
+    function clearView(){
+        var htmlString= "";
+        $(".dataview").html(htmlString);
+    }
     function showTargets(indx){
         targetIndx = indx;
+        clearView();
         var htmlString= "";
-        var rows = Chunk(targets[indx], 4);
+        var rows = Chunk(targets[indx], 16);
         rows.forEach(function(row, rowIndx){
             htmlString += '<div class="row">';
             row.forEach(function(record, recordIndx){
@@ -153,12 +182,12 @@
         $(".dataview").html(htmlString);
     }
 
-    function getTargets(){
+    function getTargets(callback){
         $.ajax({
             url: "https://phearnet.cloudant.com/targets/_design/index/_view/isUp",
             dataType: "json",
             success: function (response) {
-                targets = Chunk(response.rows, 16);
+                callback(targets = Chunk(response.rows, 64));
             }
         });
     }
