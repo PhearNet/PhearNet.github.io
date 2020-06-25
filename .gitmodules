@@ -1,0 +1,12 @@
+[submodule "packages/engine"]
+	path = packages/engine
+	url = https://github.com/PhearNet/engine.git
+[submodule "packages/core"]
+	path = packages/core
+	url = https://github.com/PhearNet/core.git
+[submodule "packages/scanner"]
+	path = packages/scanner
+	url = https://github.com/PhearNet/scanner.git
+[submodule "packages/couch"]
+	path = packages/couch
+	url = https://github.com/PhearNet/couch.git

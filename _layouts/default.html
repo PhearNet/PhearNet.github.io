@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: " en-US" }}">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/assets/imgs/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+    {% seo %}
+</head>
+
+<body>
+
+<header>
+    <div class="container">
+        <a id="a-title" style="text-decoration: none;" href="{{ '/' | relative_url }}">
+            <h1>{{ site.title | default: site.github.repository_name }}</h1>
+        </a>
+        <h2>{{ site.description | default: site.github.project_tagline }}</h2>
+    </div>
+</header>
+
+<div class="container">
+    <main id="main_content">
+        {{ content }}
+    </main>
+</div>
+
+<footer>
+    <div class="footer-wrap container">
+        <section id="downloads">
+            <h3 class="uline">@PhearNet Projects:</h3>
+            {% for repository in site.github.public_repositories %}
+            {% if repository.has_pages and repository.has_downloads and repository.name != site.github.project_title %}
+            <a href="{{ repository.homepage | default: repository.html_url }}" class="btn btn-package">
+                <span class="icon">{% octicon package stroke:white stroke-width:1 stroke-opacity:0.6 %}</span>
+                {{ repository.name }}
+            </a>
+            {% endif %}
+            {% endfor %}
+        </section>
+    </div>
+</footer>
+{% if site.google_analytics %}
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '{{ site.google_analytics }}');
+</script>
+{% endif %}
+<script data-href="{{site.github.repository_url}}" data-target="_blank"
+        src="https://unpkg.com/github-corners/dist/embed.min.js"></script>
+</body>
+</html>

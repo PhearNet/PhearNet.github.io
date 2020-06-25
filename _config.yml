@@ -1,0 +1,17 @@
+title: PhearNet
+email: github@phearzero.com
+theme: jekyll-theme-hacker
+author:
+  twitter: PhearZero
+twitter:
+  username: PhearZero
+  card: summary
+#google_analytics: UA-129663883-2
+plugins:
+  - jekyll-feed
+  - jekyll-octicons
+exclude:
+ - .idea/
+ - phearnet.github.io.iml
+ - node_modules
+ - packages
